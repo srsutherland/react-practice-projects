@@ -19,59 +19,117 @@ class SocialCard extends React.Component {
   render() {
     const user = this.props.user || this.props.post.user || defaultUser;
     const date = this.props.post.date;
-    let dateline;
-    if (date) {
-      const shorttime = this.getRelativeTime(date);
-      const fulltime = this.props.post.date.toLocaleString(date);
-      dateline = <span class="time" title={fulltime}>{` · ${shorttime}`}</span>;
-    }
 
     return (
-      <div class="socialcard">
-        <div>
-          <span class="displayname">{user.displayname || "Unknown"}</span>
-          <span class="displayname"> @{user.username || "unknown"}</span>
-          {dateline}
+      <div className="socialcard">
+        <div className="avatarcontainer"></div>
+        <div className="postcontainer">
+          <div>
+            <span className="displayname">{user.displayname || "Unknown"}</span>
+            <span className="displayname"> @{user.username || "unknown"}</span>
+            <span className="time"> · <RelativeDate date={date}/></span>
+          </div>
+          <div>{this.props.post.comment}</div>
         </div>
-    <div>{this.props.post.comment}</div>
       </div>
     );
   }
 
-  getRelativeTime(date) {
-    const now = Date.now();
-
-    if (!date) {
+  renderDate(date) {
+    if (date) {
+      const shorttime = getRelativeTime(date);
+      const fulltime = date.toLocaleString();
+      return <span class="time" title={fulltime}>{` · ${shorttime}`}</span>;
+    } else {
       return "";
     }
-    if (date > now) {
-      return "in the future";
+  }
+}
+
+class RelativeDate extends React.Component {
+  constructor(props) {
+    super(props);
+    this.date = new Date(this.props.date)
+    if (!this.date) {
+      return
     }
-    const seconds = (now - date) / 1000; //seconds
-    if (seconds < 60) {
-      return `${Math.ceil(seconds)}s ago`;
+    this.fulltime = this.date.toLocaleTimeString() + " " + this.date.toLocaleDateString();
+    this.state = {
+      relativeTime: getRelativeTime(this.props.date),
+    };
+  }
+
+  componentDidMount() {
+    this.timeout = setTimeout(this.updateRelativeTime.bind(this), 3000);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout)
+  }
+
+  render() {
+    if (!this.props.date) {
+      return "";
     }
-    const minutes = seconds / 60; //minutes
-    if (minutes < 60) {
-      return `${Math.ceil(minutes)}m ago`;
+    return (
+      <span className="relativetime" title={this.fulltime}>
+        {this.state.relativeTime}
+      </span>
+    );
+  }
+
+  updateRelativeTime() {
+    this.setState({
+      relativeTime: getRelativeTime(this.date),
+    });
+    let timeout = 10000
+    const difference = (Date.now() - this.date) / 1000
+    if (difference < 60) {
+      timeout = 1000
+    } else if (difference < 60 * 60) {
+      timeout = 20000
+    } else if (difference < 60 * 60 * 24) {
+      timeout = 1000000
+    } else if (difference < 60 * 60 * 24 * 365) {
+      return
     }
-    const hours = minutes / 60; //hours
-    if (hours < 24) {
-      return `${Math.ceil(hours)}h ago`;
-    }
-    const days = hours / 24; //days
-    if (days < 7) {
-      return `${Math.ceil(days)}d ago`;
-    }
-    if (days < 365) {
-      return date.toLocaleString("default", { month: "short", day: "numeric" });
-    } else {
-      return date.toLocaleString("default", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-    }
+    setTimeout(this.updateRelativeTime.bind(this), timeout);
+  }
+}
+
+function getRelativeTime(date) {
+  const now = Date.now();
+
+  if (!date) {
+    return "";
+  }
+  if (date > now) {
+    return "in the future";
+  }
+  const seconds = (now - date) / 1000; //seconds
+  if (seconds < 60) {
+    return `${Math.ceil(seconds)}s ago`;
+  }
+  const minutes = seconds / 60; //minutes
+  if (minutes < 60) {
+    return `${Math.round(minutes)}m ago`;
+  }
+  const hours = minutes / 60; //hours
+  if (hours < 24) {
+    return `${Math.round(hours)}h ago`;
+  }
+  const days = hours / 24; //days
+  if (days < 7) {
+    return `${Math.round(days)}d ago`;
+  }
+  if (days < 365) {
+    return date.toLocaleString("default", { month: "short", day: "numeric" });
+  } else {
+    return date.toLocaleString("default", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   }
 }
 
