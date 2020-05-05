@@ -12,9 +12,10 @@
 }
 
 .SocialCard .post-container {
-    margin-left: 1em;
+  margin-left: 1em;
 }
 
-.SocialCard .username, .SocialCard .time {
-    color: grey;
+.SocialCard .username,
+.SocialCard .time {
+  color: grey;
 }
