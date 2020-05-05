@@ -1,4 +1,5 @@
 import React from "react";
+import "./SocialCard.css";
 
 const defaultUser = {
   username: "[deleted]",
@@ -21,28 +22,18 @@ class SocialCard extends React.Component {
     const date = this.props.post.date;
 
     return (
-      <div className="socialcard">
-        <div className="avatarcontainer"></div>
-        <div className="postcontainer">
+      <div className="SocialCard">
+        <div className="avatar-container"><div className="avatar avatar-round"><img src={user.avatarURL} alt=""></img></div></div>
+        <div className="post-container">
           <div>
             <span className="displayname">{user.displayname || "Unknown"}</span>
-            <span className="displayname"> @{user.username || "unknown"}</span>
+            <span className="username"> @{user.username || "unknown"}</span>
             <span className="time"> · <RelativeDate date={date}/></span>
           </div>
           <div>{this.props.post.comment}</div>
         </div>
       </div>
     );
-  }
-
-  renderDate(date) {
-    if (date) {
-      const shorttime = getRelativeTime(date);
-      const fulltime = date.toLocaleString();
-      return <span class="time" title={fulltime}>{` · ${shorttime}`}</span>;
-    } else {
-      return "";
-    }
   }
 }
 

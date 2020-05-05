@@ -10,7 +10,7 @@ const me = {
 
 const comment1 = {
   user: me,
-  comment: "According to all known laws of aviation, the honeybee",
+  comment: "According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyways. Because bees don't care what humans think is impossible.",
   date: Date.now(),
   replies: 0,
   likes: 0,
@@ -20,9 +20,8 @@ const comment1 = {
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <SocialCard post={comment1} user={me} />
-      </header>
+
+      <section className="social-container"><SocialCard post={comment1} user={me} /></section>
     </div>
   );
 }
