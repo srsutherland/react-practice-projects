@@ -1,5 +1,6 @@
 import React from "react";
 import "./SocialCard.css";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
 const defaultUser = {
   username: "[deleted]",
@@ -30,10 +31,23 @@ class SocialCard extends React.Component {
             <span className="username"> @{user.username || "unknown"}</span>
             <span className="time"> · <RelativeDate date={date}/></span>
           </div>
-          <div>{this.props.post.comment}</div>
+          <div className="comment">{this.props.post.comment}</div>
+          <div className="button-container"><LikeButton liked={this.state.liked}/><LikeButton liked={true}/></div>
         </div>
       </div>
     );
+  }
+}
+
+class LikeButton extends React.Component {
+  render() {
+    let liked = this.props.liked || false;
+    let size = this.props.size || "1.8em";
+    if (liked) {
+      return <span class="LikeButton SocialButton"><AiFillHeart size={size} color="lightcoral"/></span>
+    } else {
+      return <span class="LikeButton SocialButton"><AiOutlineHeart size={size}/></span>
+    }
   }
 }
 
@@ -63,7 +77,7 @@ class RelativeDate extends React.Component {
       return "";
     }
     return (
-      <span className="relativetime" title={this.fulltime}>
+      <span className="RelativeDate" title={this.fulltime}>
         {this.state.relativeTime}
       </span>
     );

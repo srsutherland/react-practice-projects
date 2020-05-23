@@ -19,3 +19,13 @@
 .SocialCard .time {
   color: grey;
 }
+
+.SocialCard .button-container {
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: .8em;
+}
+
+.SocialCard .SocialButton {
+  cursor: pointer;
+}
