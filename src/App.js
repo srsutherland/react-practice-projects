@@ -20,7 +20,6 @@ const comment1 = {
 function App() {
   return (
     <div className="App">
-
       <section className="social-container"><SocialCard post={comment1} user={me} /></section>
     </div>
   );
