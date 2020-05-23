@@ -14,13 +14,20 @@ class SocialCard extends React.Component {
 
     this.state = {
       liked: false,
+      likespoof: 0,
       shared: false,
     };
   }
 
   render() {
+    if (this.props.post === null || !(typeof this.props.post === 'object')) {
+      console.error("tried to render empty post")
+      return;
+    }
     const user = this.props.user || this.props.post.user || defaultUser;
     const date = this.props.post.date;
+    console.log((this.props.post.likes || 0) + this.state.likespoof)
+    const likecount = (this.props.post.likes || 0) + this.state.likespoof
 
     return (
       <div className="SocialCard">
@@ -32,21 +39,41 @@ class SocialCard extends React.Component {
             <span className="time"> · <RelativeDate date={date}/></span>
           </div>
           <div className="comment">{this.props.post.comment}</div>
-          <div className="button-container"><LikeButton liked={this.state.liked}/><LikeButton liked={true}/></div>
+          <div className="button-container">
+            <LikeButton liked={this.state.liked} count={likecount} onClick={this.likeClicked}/>
+          </div>
         </div>
       </div>
     );
+  }
+
+  likeClicked = () => {
+    if (!this.state.liked) { //like
+      this.setState({liked: true, likespoof: this.state.likespoof + 1})
+    } else { //unlike
+      this.setState({liked: false, likespoof: this.state.likespoof - 1})
+    }
   }
 }
 
 class LikeButton extends React.Component {
   render() {
     let liked = this.props.liked || false;
+    let count = this.props.count || true;
     let size = this.props.size || "1.8em";
+    let color = "lightcoral";
     if (liked) {
-      return <span class="LikeButton SocialButton"><AiFillHeart size={size} color="lightcoral"/></span>
+      return <span class="LikeButton SocialButton" style={{color: color}} onClick={this.onClick}><AiFillHeart size={size}/>{count ? count : ""}</span>
     } else {
-      return <span class="LikeButton SocialButton"><AiOutlineHeart size={size}/></span>
+      return <span class="LikeButton SocialButton" onClick={this.onClick}><AiOutlineHeart size={size}/>{count ? count : ""}</span>
+    }
+  }
+
+  onClick = () => {
+    console.log(this.props.liked)
+    if (this.props.onClick instanceof Function) {
+      console.log(1)
+      this.props.onClick()
     }
   }
 }

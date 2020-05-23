@@ -28,4 +28,6 @@
 
 .SocialCard .SocialButton {
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 }
