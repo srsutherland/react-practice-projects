@@ -23,7 +23,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 Builds the app for github pages (Hosted at https://srsutherland.github.io/react-practice-projects/)
 
-### Updating `react-scripts` [[x\]](https://create-react-app.dev/docs/updating-to-new-releases/)
+### Updating `react-scripts` \[[x](https://create-react-app.dev/docs/updating-to-new-releases/)\]
 
 To update an existing project to a new version of `react-scripts`, [open the changelog](https://github.com/facebook/create-react-app/blob/master/CHANGELOG.md), find the version you’re currently on (check `package.json` in this folder if you’re not sure), and apply the migration instructions for the newer versions.
 
